@@ -4,16 +4,38 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Recommendations</title>
+    <style>
+        .movie-container {
+            display: flex;
+            flex-wrap: nowrap; /* Prevent wrapping to keep movies in a row */
+            overflow-x: auto; /* Enable horizontal scrolling if necessary */
+            justify-content: flex-start; /* Align movies to the start of the container */
+        }
+        .movie {
+            margin: 10px;
+            text-align: center; /* Center text within movie container */
+        }
+        .movie img {
+            width: 100px; /* Adjust as needed */
+            height: auto;
+        }
+        .movie h3 {
+            font-size: 20px; /* Make movie title bigger */
+        }
+        .movie p {
+            font-size: 14px; /* Make similarity score smaller */
+        }
+    </style>
 </head>
 <body>
     <h2>Recommended Movies</h2>
-    <div>
+    <div class="movie-container">
         {% for movie in recommended_movies %}
-            <div>
-                <img src="{{ movie.poster }}" alt="{{ movie.name }}">
-                <p>{{ movie.name }}</p>
-                <p>Similarity Score: {{ movie.score }}</p>
-            </div>
+        <div class="movie">
+            <h3>{{ movie.name }}</h3>
+            <img src="{{ movie.poster }}" alt="{{ movie.name }}">
+            <p>Similarity Score: {{ movie.score }}</p>
+        </div>
         {% endfor %}
     </div>
 </body>
