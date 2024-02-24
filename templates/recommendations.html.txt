@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Recommendations</title>
+</head>
+<body>
+    <h2>Recommended Movies</h2>
+    <div>
+        {% for movie in recommended_movies %}
+            <div>
+                <img src="{{ movie.poster }}" alt="{{ movie.name }}">
+                <p>{{ movie.name }}</p>
+                <p>Similarity Score: {{ movie.score }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>
