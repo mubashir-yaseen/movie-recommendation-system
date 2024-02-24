@@ -7,14 +7,25 @@
 </head>
 <body>
     <h1>Movie Recommender System</h1>
-    <form action="/recommendations" method="post">
+    <form action="/" method="post">
         <label for="selected_movie">Select a movie from the dropdown:</label>
         <select name="selected_movie" id="selected_movie">
-            {% for movie in movies %}
+            {% for movie in movie_list %}
                 <option value="{{ movie }}">{{ movie }}</option>
             {% endfor %}
-        </select>
+        </select>        
         <button type="submit">Get Recommendations</button>
     </form>
+    {% if recommended_movies %}
+    <div>
+        <h2>Recommended Movies</h2>
+        <ul>
+            {% for movie in recommended_movies %}
+                <li>{{ movie.name }} - Score: {{ movie.score }}</li>
+                <img src="{{ movie.poster }}" alt="{{ movie.name }}">
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
 </body>
 </html>
