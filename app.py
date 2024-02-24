@@ -1,6 +1,8 @@
 import pickle
-import streamlit as st
 import requests
+from flask import Flask, render_template, request
+
+app = Flask(__name__)
 
 # Function to fetch movie poster
 def fetch_poster(movie_id):
@@ -31,22 +33,15 @@ with open('movie_list.pkl', 'rb') as file:
 with open('similarity.pkl', 'rb') as file:
     similarity = pickle.load(file)
 
-# Streamlit UI
-st.set_page_config(page_title="Movie Recommender", page_icon="🎬", layout="wide")
-st.title('Movie Recommender System')
+@app.route('/')
+def index():
+    return render_template('index.html')
 
-selected_movie = st.selectbox(
-    "Select a movie from the dropdown",
-    movies['title'].values
-)
-
-if st.button('Get Recommendations'):
+@app.route('/recommendations', methods=['POST'])
+def get_recommendations():
+    selected_movie = request.form.get('selected_movie')
     recommended_movies = recommend(selected_movie)
-    num_cols = min(len(recommended_movies), 5)
-    cols = st.columns(num_cols)
-    for i, col in enumerate(cols):
-        if i < len(recommended_movies):
-            with col:
-                st.image(recommended_movies[i]['poster'], use_column_width=True)
-                st.write(recommended_movies[i]['name'])
-                st.write(f"Similarity Score: {recommended_movies[i]['score']:.2f}")
+    return render_template('recommendations.html', recommended_movies=recommended_movies)
+
+if __name__ == '__main__':
+    app.run(debug=True)
