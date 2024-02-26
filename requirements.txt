@@ -1,3 +1,7 @@
 Flask
 requests
 Gunicorn
+pickle
+pandas
+numpy
+sklearn
