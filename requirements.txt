@@ -4,4 +4,4 @@ gunicorn==21.2.0
 requests==2.31.0
 pandas==2.2.1
 numpy==1.26.4
-Pytho==3.12.2
+Python==3.12.2
