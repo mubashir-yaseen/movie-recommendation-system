@@ -10,15 +10,18 @@ app = Flask(__name__)
 with open('movie_list.json', 'r') as f:
     movie_data = json.load(f)
 
-# Reduce similarity data
-reduce_similarity()
-
 # Load reduced similarity matrix from JSON
 with open('reduced_similarity.json', 'r') as f:
     similarity_data = json.load(f)
 
 # Convert similarity matrix back to numpy array
 similarity_matrix = pd.DataFrame(similarity_data)
+
+# Set the threshold value (you need to define the threshold)
+threshold = 0.5
+
+# Reduce similarity data
+reduce_similarity(similarity_matrix, threshold)
 
 def recommend(movie_title):
     # Find the index of the movie
