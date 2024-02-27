@@ -1,5 +1,6 @@
 import pickle
 import requests
+import json
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -8,10 +9,15 @@ app = Flask(__name__)
 def fetch_poster(movie_id):
     url = f"https://api.themoviedb.org/3/movie/{movie_id}"
     params = {"api_key": "8265bd1679663a7ea12ac168da84d2e8", "language": "en-US"}
-    response = requests.get(url, params=params)
-    data = response.json()
-    poster_path = data.get('poster_path')
-    return f"https://image.tmdb.org/t/p/w500/{poster_path}" if poster_path else None
+    try:
+        response = requests.get(url, params=params)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        data = response.json()
+        poster_path = data.get('poster_path')
+        return f"https://image.tmdb.org/t/p/w500/{poster_path}" if poster_path else None
+    except requests.RequestException as e:
+        print(f"Error fetching poster: {e}")
+        return None
 
 # Function to recommend similar movies
 def recommend(movie):
@@ -35,8 +41,16 @@ def recommend(movie):
 # Load movie data and similarity scores
 with open('movie_list.pkl', 'rb') as file:
     movies = pickle.load(file)
+
 with open('similarity.pkl', 'rb') as file:
     similarity = pickle.load(file)
+
+# Convert data to JSON and save to separate files
+with open('movies_data.json', 'w') as file:
+    json.dump(movies, file)
+
+with open('similarity_data.json', 'w') as file:
+    json.dump(similarity, file)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
