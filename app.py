@@ -1,68 +1,39 @@
-import pickle
-import requests
 import json
+import pandas as pd
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
 
-# Function to fetch movie poster
-def fetch_poster(movie_id):
-    url = f"https://api.themoviedb.org/3/movie/{movie_id}"
-    params = {"api_key": "8265bd1679663a7ea12ac168da84d2e8", "language": "en-US"}
-    try:
-        response = requests.get(url, params=params)
-        response.raise_for_status()  # Raise an exception for HTTP errors
-        data = response.json()
-        poster_path = data.get('poster_path')
-        return f"https://image.tmdb.org/t/p/w500/{poster_path}" if poster_path else None
-    except requests.RequestException as e:
-        print(f"Error fetching poster: {e}")
-        return None
+# Load movie data from JSON
+with open('movie_list.json', 'r') as f:
+    movie_data = json.load(f)
 
-# Function to recommend similar movies
-def recommend(movie):
-    selected_movies = movies.loc[movies['title'] == movie]
-    if selected_movies.empty:
-        return []  # Return an empty list if no movie matches the given title
-    
-    index = selected_movies.index[0]
-    distances = sorted(enumerate(similarity[index]), reverse=True, key=lambda x: x[1])
-    recommended_movies = []
-    for i, (movie_index, score) in enumerate(distances[1:6], start=1):
-        movie_data = movies.iloc[movie_index]
-        recommended_movies.append({
-            'name': movie_data['title'],
-            'poster': fetch_poster(movie_data['movie_id']),
-            'score': score
-        })
-    return recommended_movies
+# Load similarity matrix from JSON
+with open('similarity.json', 'r') as f:
+    similarity_data = json.load(f)
 
+# Convert similarity matrix back to numpy array
+similarity_matrix = pd.DataFrame(similarity_data)
 
-# Load movie data and similarity scores
-with open('movie_list.pkl', 'rb') as file:
-    movies = pickle.load(file)
+def recommend(movie_title):
+    # Find the index of the movie
+    movie_index = movie_data.index[movie_data['title'] == movie_title][0]
+    # Get similarity scores for the given movie
+    similarity_scores = similarity_matrix.iloc[movie_index]
+    # Sort movies based on similarity scores
+    recommended_movies = similarity_scores.sort_values(ascending=False).index[1:6]
+    # Return the titles of recommended movies
+    return movie_data.iloc[recommended_movies]['title'].tolist()
 
-with open('similarity.pkl', 'rb') as file:
-    similarity = pickle.load(file)
-
-# Convert data to JSON and save to separate files
-with open('movies_data.json', 'w') as file:
-    json.dump(movies, file)
-
-with open('similarity_data.json', 'w') as file:
-    json.dump(similarity, file)
-
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/')
 def index():
-    recommended_movies = []
-    if request.method == 'POST':
-        selected_movie = request.form.get('selected_movie')
-        recommended_movies = recommend(selected_movie)
-    # Load the movie list for the dropdown
-    with open('movie_list.pkl', 'rb') as file:
-        movie_list = pickle.load(file)['title'].tolist()
-    return render_template('index.html', recommended_movies=recommended_movies, movie_list=movie_list)
+    return render_template('index.html')
 
+@app.route('/recommend', methods=['POST'])
+def recommend_movies():
+    movie_title = request.form['movie_title']
+    recommended_movies = recommend(movie_title)
+    return render_template('recommendations.html', movie_title=movie_title, recommended_movies=recommended_movies)
 
 if __name__ == '__main__':
     app.run(debug=True)
