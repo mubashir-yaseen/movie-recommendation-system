@@ -25,7 +25,7 @@ def recommend(movie_title):
     similarity_scores = similarity_data[movie_index]
     
     # Filter movies based on the threshold
-    recommended_movies = [movie['title'] for idx, score in enumerate(similarity_scores) if score > threshold]
+    recommended_movies = [movie_data[idx]['title'] for idx, score in enumerate(similarity_scores) if score > threshold]
     
     # Exclude the queried movie from recommendations
     recommended_movies = [movie for movie in recommended_movies if movie != movie_title]
@@ -35,7 +35,7 @@ def recommend(movie_title):
 
 @app.route('/')
 def index():
-    return render_template('index.html', movie_list=movie_data)
+    return render_template('index.html', movie_list=[movie['title'] for movie in movie_data])
 
 @app.route('/recommend', methods=['POST'])
 def get_recommendations():
