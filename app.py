@@ -36,7 +36,7 @@ def recommend(movie_title):
 @app.route('/')
 def index():
     # Pass the list of movie titles to the template
-    return render_template('index.html', movie_list=movie_data)
+    return render_template('index.html', movie_list=list(movie_data.keys()))
 
 @app.route('/recommend', methods=['POST'])
 def get_recommendations():
