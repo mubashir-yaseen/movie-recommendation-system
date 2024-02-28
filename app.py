@@ -39,17 +39,17 @@ def recommend(movie_title):
     similarity_scores = similarity_data[movie_index]
 
     # Filter movies based on the threshold
-    recommended_movies = [movie_data[idx]['title'] for idx, score in enumerate(similarity_scores) if score > threshold]
+    recommended_movies = [movie_data[idx] for idx, score in enumerate(similarity_scores) if score > threshold]
 
     # Exclude the queried movie from recommendations
-    recommended_movies = [movie for movie in recommended_movies if movie != movie_title]
+    recommended_movies = [movie for movie in recommended_movies if movie['title'] != movie_title]
 
     # Return top 5 recommended movies with posters
     recommended_movies_with_posters = []
     for movie in recommended_movies[:5]:
-        movie_id = movie_data[movie_index]['movie_id']  # Fixing the index here
+        movie_id = movie['movie_id']  # Get movie ID from the data
         poster_url = fetch_poster(movie_id)
-        recommended_movies_with_posters.append({'title': movie, 'poster': poster_url})
+        recommended_movies_with_posters.append({'title': movie['title'], 'poster': poster_url})
     
     return recommended_movies_with_posters
 
