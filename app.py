@@ -47,7 +47,7 @@ def recommend(movie_title):
     # Return top 5 recommended movies with posters
     recommended_movies_with_posters = []
     for movie in recommended_movies[:5]:
-        movie_id = movie_data[movie]['movie_id']
+        movie_id = movie_data[movie_index]['movie_id']  # Fixing the index here
         poster_url = fetch_poster(movie_id)
         recommended_movies_with_posters.append({'title': movie, 'poster': poster_url})
     
