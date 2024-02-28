@@ -35,6 +35,10 @@ def recommend(movie_title):
     # Get the index of the movie
     movie_index = [movie['title'] for movie in movie_data].index(movie_title)
 
+    # Load similarity scores for the given movie
+    with open('reduced_similarity.json', 'r') as f:
+        similarity_data = json.load(f)
+
     # Get similarity scores for the given movie
     similarity_scores = similarity_data[movie_index]
 
