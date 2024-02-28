@@ -15,17 +15,17 @@ with open('reduced_similarity.json', 'r') as f:
 threshold = 0.5
 
 def recommend(movie_title):
-    if movie_title not in movie_data:
+    if movie_title not in [movie['title'] for movie in movie_data]:
         return []
     
     # Get the index of the movie
-    movie_index = movie_data[movie_title]['index']
+    movie_index = [movie['title'] for movie in movie_data].index(movie_title)
     
     # Get similarity scores for the given movie
     similarity_scores = similarity_data[movie_index]
     
     # Filter movies based on the threshold
-    recommended_movies = [movie_data[idx]['title'] for idx, score in enumerate(similarity_scores) if score > threshold]
+    recommended_movies = [movie['title'] for idx, score in enumerate(similarity_scores) if score > threshold]
     
     # Exclude the queried movie from recommendations
     recommended_movies = [movie for movie in recommended_movies if movie != movie_title]
@@ -35,14 +35,13 @@ def recommend(movie_title):
 
 @app.route('/')
 def index():
-    # Pass the list of movie titles to the template
-    return render_template('index.html', movie_list=list(movie_data.keys()))
+    return render_template('index.html', movie_list=movie_data)
 
 @app.route('/recommend', methods=['POST'])
 def get_recommendations():
     movie_title = request.form['selected_movie']
     recommendations = recommend(movie_title)
-    return render_template('recommendations.html', recommended_movies=recommendations)
+    return render_template('recommendations.html', movie=movie_title, recommended_movies=recommendations)
 
 if __name__ == '__main__':
     app.run(debug=True)
