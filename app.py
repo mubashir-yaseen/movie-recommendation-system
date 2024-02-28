@@ -1,4 +1,5 @@
 import json
+import pandas as pd
 from flask import Flask, render_template, request
 from reduce_similarity import reduce_similarity
 
@@ -12,7 +13,7 @@ with open('movie_list.json', 'r') as f:
 with open('reduced_similarity.json', 'r') as f:
     similarity_data = json.load(f)
 
-# Convert similarity matrix back to numpy array
+# Convert similarity matrix back to pandas DataFrame
 similarity_matrix = pd.DataFrame(similarity_data)
 
 # Set the threshold value (you need to define the threshold)
@@ -23,7 +24,7 @@ reduce_similarity(similarity_matrix, threshold)
 
 def recommend(movie_title):
     # Find the index of the movie
-    movie_index = movie_data[movie_title]
+    movie_index = movie_data.index[movie_data['title'] == movie_title][0]
     # Get similarity scores for the given movie
     similarity_scores = similarity_matrix.iloc[movie_index]
     # Sort movies based on similarity scores
@@ -34,10 +35,11 @@ def recommend(movie_title):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        # Pass movie_list to the index.html template
-        return render_template('index.html', movie_list=list(movie_data.keys()))
+        # Extract movie titles from the movie_data list of dictionaries
+        movie_titles = [movie['title'] for movie in movie_data]
+        return render_template('index.html', movie_list=movie_titles)
     elif request.method == 'POST':
-        movie_title = request.form['movie_title']
+        movie_title = request.form['selected_movie']
         recommended_movies = recommend(movie_title)
         return render_template('recommendations.html', movie_title=movie_title, recommended_movies=recommended_movies)
 
