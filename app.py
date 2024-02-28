@@ -3,7 +3,6 @@ import pandas as pd
 from flask import Flask, render_template, request
 from reduce_similarity import reduce_similarity
 
-
 app = Flask(__name__)
 
 # Load movie data from JSON
@@ -33,15 +32,14 @@ def recommend(movie_title):
     # Return the titles of recommended movies
     return movie_data.iloc[recommended_movies]['title'].tolist()
 
-@app.route('/')
+@app.route('/', methods=['GET', 'POST'])
 def index():
-    return render_template('index.html')
-
-@app.route('/recommend', methods=['POST'])
-def recommend_movies():
-    movie_title = request.form['movie_title']
-    recommended_movies = recommend(movie_title)
-    return render_template('recommendations.html', movie_title=movie_title, recommended_movies=recommended_movies)
+    if request.method == 'GET':
+        return render_template('index.html')
+    elif request.method == 'POST':
+        movie_title = request.form['movie_title']
+        recommended_movies = recommend(movie_title)
+        return render_template('recommendations.html', movie_title=movie_title, recommended_movies=recommended_movies)
 
 if __name__ == '__main__':
     app.run(debug=True)
