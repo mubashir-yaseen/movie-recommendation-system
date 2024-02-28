@@ -41,7 +41,7 @@ def index():
 def get_recommendations():
     movie_title = request.form['selected_movie']
     recommendations = recommend(movie_title)
-    return render_template('recommendations.html', movie=movie_title, recommended_movies=recommendations)
+    return render_template('recommendations.html', movie_title=movie_title, recommended_movies=recommendations)
 
 if __name__ == '__main__':
     app.run(debug=True)
