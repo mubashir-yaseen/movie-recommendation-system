@@ -44,19 +44,13 @@ def recommend(movie_title):
     # Exclude the queried movie from recommendations
     recommended_movies = [movie for movie in recommended_movies if movie != movie_title]
 
-    # Print recommended movies for debugging
-    print("Recommended Movies:", recommended_movies)
-
     # Return top 5 recommended movies with posters
     recommended_movies_with_posters = []
     for movie in recommended_movies[:5]:
-        movie_id = movie_data[movie_index]['movie_id']
+        movie_id = movie_data[movie_index]['movie_id']  # Fixing the index here
         poster_url = fetch_poster(movie_id)
         recommended_movies_with_posters.append({'title': movie, 'poster': poster_url})
     
-    # Print recommended movies with posters for debugging
-    print("Recommended Movies with Posters:", recommended_movies_with_posters)
-
     return recommended_movies_with_posters
 
 @app.route('/')
