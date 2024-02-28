@@ -35,13 +35,14 @@ def recommend(movie_title):
 
 @app.route('/')
 def index():
-    return render_template('index.html')
+    # Pass the list of movie titles to the template
+    return render_template('index.html', movie_list=list(movie_data.keys()))
 
 @app.route('/recommend', methods=['POST'])
 def get_recommendations():
     movie_title = request.form['movie']
     recommendations = recommend(movie_title)
-    return render_template('recommendations.html', movie=movie_title, recommendations=recommendations)
+    return render_template('index.html', movie_list=list(movie_data.keys()), recommended_movies=recommendations, selected_movie=movie_title)
 
 if __name__ == '__main__':
     app.run(debug=True)
