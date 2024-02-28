@@ -35,7 +35,8 @@ def recommend(movie_title):
 @app.route('/', methods=['GET', 'POST'])
 def index():
     if request.method == 'GET':
-        return render_template('index.html')
+        # Pass movie_list to the index.html template
+        return render_template('index.html', movie_list=movie_data['title'].tolist())
     elif request.method == 'POST':
         movie_title = request.form['movie_title']
         recommended_movies = recommend(movie_title)
