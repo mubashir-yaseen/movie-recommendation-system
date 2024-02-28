@@ -44,12 +44,13 @@ def recommend(movie_title):
     # Exclude the queried movie from recommendations
     recommended_movies = [movie for movie in recommended_movies if movie['title'] != movie_title]
 
-    # Return top 5 recommended movies with posters
+    # Return top 5 recommended movies with posters and similarity scores
     recommended_movies_with_posters = []
     for movie in recommended_movies[:5]:
         movie_id = movie['movie_id']  # Get movie ID from the data
         poster_url = fetch_poster(movie_id)
-        recommended_movies_with_posters.append({'title': movie['title'], 'poster': poster_url})
+        similarity_score = similarity_scores[movie_data.index(movie)]  # Get similarity score
+        recommended_movies_with_posters.append({'title': movie['title'], 'poster': poster_url, 'score': similarity_score})
     
     return recommended_movies_with_posters
 
