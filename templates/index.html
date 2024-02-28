@@ -11,7 +11,7 @@
         <label for="selected_movie">Select a movie from the dropdown:</label>
         <select name="selected_movie" id="selected_movie">
             {% for movie in movie_list %}
-                <option value="{{ movie.title }}">{{ movie.title }}</option>
+                <option value="{{ movie }}">{{ movie }}</option>
             {% endfor %}
         </select>        
         <button type="submit">Get Recommendations</button>
