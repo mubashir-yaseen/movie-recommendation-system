@@ -9,22 +9,12 @@
     <h1>Movie Recommender System</h1>
     <form action="/recommend" method="post">
         <label for="selected_movie">Select a movie from the dropdown:</label>
-        <select name="movie" id="selected_movie">
-            {% for movie in movie_list %}
-                <option value="{{ movie }}">{{ movie }}</option>
+        <select name="selected_movie" id="selected_movie">
+            {% for movie_title, movie_info in movie_list.items() %}
+                <option value="{{ movie_title }}">{{ movie_title }}</option>
             {% endfor %}
         </select>        
         <button type="submit">Get Recommendations</button>
     </form>
-    {% if recommended_movies %}
-    <div>
-        <h2>Recommended Movies</h2>
-        <ul>
-            {% for movie in recommended_movies %}
-                <li>{{ movie }}</li>
-            {% endfor %}
-        </ul>
-    </div>
-    {% endif %}
 </body>
 </html>
