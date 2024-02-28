@@ -1,4 +1,5 @@
 import json
+import requests
 from flask import Flask, render_template, request
 
 app = Flask(__name__)
@@ -14,24 +15,43 @@ with open('reduced_similarity.json', 'r') as f:
 # Set the threshold value
 threshold = 0.5
 
+# TMDB API Key
+TMDB_API_KEY = "6c22505b004449fe37e6509b2d4b71ba"
+
+def fetch_poster(movie_id):
+    url = f"https://api.themoviedb.org/3/movie/{movie_id}?api_key={TMDB_API_KEY}&language=en-US"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        poster_path = data.get('poster_path')
+        if poster_path:
+            return f"https://image.tmdb.org/t/p/w500/{poster_path}"
+    return None
+
 def recommend(movie_title):
     if movie_title not in [movie['title'] for movie in movie_data]:
         return []
-    
+
     # Get the index of the movie
     movie_index = [movie['title'] for movie in movie_data].index(movie_title)
-    
+
     # Get similarity scores for the given movie
     similarity_scores = similarity_data[movie_index]
-    
+
     # Filter movies based on the threshold
     recommended_movies = [movie_data[idx]['title'] for idx, score in enumerate(similarity_scores) if score > threshold]
-    
+
     # Exclude the queried movie from recommendations
     recommended_movies = [movie for movie in recommended_movies if movie != movie_title]
+
+    # Return top 5 recommended movies with posters
+    recommended_movies_with_posters = []
+    for movie in recommended_movies[:5]:
+        movie_id = movie_data[movie]['movie_id']
+        poster_url = fetch_poster(movie_id)
+        recommended_movies_with_posters.append({'title': movie, 'poster': poster_url})
     
-    # Return top 5 recommended movies
-    return recommended_movies[:5]
+    return recommended_movies_with_posters
 
 @app.route('/')
 def index():
