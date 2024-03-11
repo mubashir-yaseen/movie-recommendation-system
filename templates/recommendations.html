@@ -28,13 +28,13 @@
     </style>
 </head>
 <body>
-    <h2>Recommended Movies</h2>
+    <h2>Recommended Movies for {{ name }}</h2>
     <div class="movie-container">
         {% for movie in recommended_movies %}
         <div class="movie">
-            <h3>{{ movie.title }}</h3> <!-- Corrected from movie.name to movie.title -->
-            <img src="{{ movie.poster }}" alt="{{ movie.title }}"> <!-- Corrected from movie.poster to movie.poster -->
-            <!-- Since there's no similarity score in the movie object, we'll remove this line -->
+            <h3>{{ movie.title }}</h3>
+            <img src="{{ movie.poster }}" alt="{{ movie.title }}">
+            <!-- Remove similarity score since it's not included in the movie object -->
         </div>
         {% endfor %}
     </div>
