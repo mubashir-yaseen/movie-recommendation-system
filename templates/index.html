@@ -6,8 +6,8 @@
     <title>Movie Recommender System</title>
 </head>
 <body>
-    <h1>Movie Recommender System</h1>
-    <form action="/recommend" method="post">
+    <h1>Welcome to the Movie Recommender System, {{ name }}!</h1>
+    <form action="/recommend" method="post"> <!-- Update action attribute to /recommend -->
         <label for="selected_movie">Select a movie from the dropdown:</label>
         <select name="selected_movie" id="selected_movie">
             {% for movie in movie_list %}
