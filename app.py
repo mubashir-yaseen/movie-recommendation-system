@@ -20,7 +20,7 @@ except FileNotFoundError:
 threshold = 0.5
 
 # TMDB API Key
-TMDB_API_KEY = "6c22505b004449fe37e6509b2d4b71ba"
+TMDB_API_KEY = "your_tmdb_api_key_here"
 
 # User feedback data
 user_feedback = []
@@ -65,8 +65,16 @@ def recommend(movie_title):
     return recommended_movies_with_posters
 
 def update_similarity_matrix():
-    # Use user feedback to update similarity matrix
-    pass  # Add your code here
+    global similarity_data
+    # Update similarity matrix based on user feedback
+    for feedback in user_feedback:
+        movie_index = [movie['title'] for movie in movie_data].index(feedback['movie_title'])
+        if feedback['feedback_type'] == 'like':
+            for i in range(len(similarity_data)):
+                similarity_data[i][movie_index] += 0.1  # Increase similarity with liked movie
+        elif feedback['feedback_type'] == 'dislike':
+            for i in range(len(similarity_data)):
+                similarity_data[i][movie_index] -= 0.1  # Decrease similarity with disliked movie
 
 @app.route('/')
 def index():
