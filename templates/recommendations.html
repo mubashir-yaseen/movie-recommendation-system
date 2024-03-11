@@ -25,6 +25,14 @@
         .movie p {
             font-size: 14px; /* Make similarity score smaller */
         }
+        .feedback-buttons {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+        }
+        .feedback-buttons button {
+            margin: 0 5px;
+        }
     </style>
 </head>
 <body>
@@ -34,9 +42,38 @@
         <div class="movie">
             <h3>{{ movie.title }}</h3>
             <img src="{{ movie.poster }}" alt="{{ movie.title }}">
-            <!-- Remove similarity score since it's not included in the movie object -->
+            <div class="feedback-buttons">
+                <button onclick="sendFeedback('{{ movie.title }}', 'like')">Like</button>
+                <button onclick="sendFeedback('{{ movie.title }}', 'dislike')">Dislike</button>
+            </div>
         </div>
         {% endfor %}
     </div>
+
+    <script>
+        function sendFeedback(movieTitle, feedbackType) {
+            // Send feedback to the server using AJAX
+            fetch('/feedback', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    movie_title: movieTitle,
+                    feedback_type: feedbackType
+                })
+            })
+            .then(response => {
+                if (response.ok) {
+                    console.log('Feedback sent successfully.');
+                } else {
+                    console.error('Failed to send feedback.');
+                }
+            })
+            .catch(error => {
+                console.error('Error sending feedback:', error);
+            });
+        }
+    </script>
 </body>
 </html>
