@@ -20,7 +20,7 @@ except FileNotFoundError:
 threshold = 0.5
 
 # TMDB API Key
-TMDB_API_KEY = "your_tmdb_api_key_here"
+TMDB_API_KEY = "6c22505b004449fe37e6509b2d4b71ba"
 
 # User feedback data
 user_feedback = []
