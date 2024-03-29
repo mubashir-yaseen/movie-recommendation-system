@@ -57,7 +57,7 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 ## Acknowledgments
 - [STANFORD eBook](http://infolab.stanford.edu/~ullman/mmds/ch9.pdf)
-- [STANFORD Research Paper](ttps://cs229.stanford.edu/proj2013/Bystrom-MovieRecommendationsFromUserRatings.pdf)
+- [STANFORD Research Paper](https://cs229.stanford.edu/proj2013/Bystrom-MovieRecommendationsFromUserRatings.pdf)
 - [MIT Research Paper](https://news.mit.edu/2011/compare-recommendation-systems-0708)
 - [IEEE Research Paper](https://ieeexplore.ieee.org/document/8663822)
 
