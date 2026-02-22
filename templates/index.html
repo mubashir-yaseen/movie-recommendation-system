@@ -4,17 +4,113 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Recommender System</title>
+    <style>
+        /* Google Font */
+        @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+        /* Reset default margin and padding */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #6a11cb, #2575fc);
+            color: #fff;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 40px 50px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            font-size: 28px;
+            margin-bottom: 30px;
+            color: #ffd700;
+            text-shadow: 1px 1px 4px #000;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-weight: 500;
+            font-size: 16px;
+        }
+
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            border-radius: 8px;
+            border: none;
+            margin-bottom: 25px;
+            font-size: 16px;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        select:hover {
+            transform: scale(1.05);
+        }
+
+        button {
+            background: #ffd700;
+            color: #000;
+            font-weight: bold;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #ffba00;
+            transform: scale(1.05);
+        }
+
+        /* Dropdown focus style */
+        select:focus {
+            border: 2px solid #ffd700;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 600px) {
+            .container {
+                padding: 30px 20px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <h1>Welcome to the Movie Recommender System, {{ name }}!</h1>
-    <form action="/recommend" method="post"> <!-- Update action attribute to /recommend -->
-        <label for="selected_movie">Select a movie from the dropdown:</label>
-        <select name="selected_movie" id="selected_movie">
-            {% for movie in movie_list %}
-                <option value="{{ movie }}">{{ movie }}</option>
-            {% endfor %}
-        </select>        
-        <button type="submit">Get Recommendations</button>
-    </form>
+    <div class="container">
+        <h1>Welcome to the Movie Recommender System, {{ name }}!</h1>
+        <form action="/recommend" method="post">
+            <label for="selected_movie">Select a movie from the dropdown:</label>
+            <select name="selected_movie" id="selected_movie">
+                {% for movie in movie_list %}
+                    <option value="{{ movie }}">{{ movie }}</option>
+                {% endfor %}
+            </select>
+            <button type="submit">Get Recommendations</button>
+        </form>
+    </div>
 </body>
 </html>
